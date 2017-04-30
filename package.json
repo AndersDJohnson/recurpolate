@@ -1,0 +1,18 @@
+{
+  "name": "recurpolate",
+  "version": "1.0.0",
+  "description": "Recursive, self-referential interpolation of objects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Anders D. Johnson",
+  "license": "ISC",
+  "dependencies": {
+    "lodash.template": "^4.4.0",
+    "traverse": "^0.6.6"
+  },
+  "devDependencies": {
+    "jest": "^19.0.2"
+  }
+}
