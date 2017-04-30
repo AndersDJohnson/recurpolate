@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "author": "Anders D. Johnson",
+  "repository": "adjohnson916/recurpolate",
   "license": "ISC",
   "dependencies": {
     "lodash.template": "^4.4.0",
