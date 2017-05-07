@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src/**/*.js",
-    "prepush": "npm test",
-    "test": "npm run lint && npm run test:cov && codecov",
+    "prepush": "yarn test",
+    "test": "yarn run lint && yarn run test:cov && codecov",
     "test:cov": "jest --coverage",
     "test:nocov": "jest"
   },
