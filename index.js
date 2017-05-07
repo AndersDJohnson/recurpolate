@@ -2,6 +2,10 @@ var traverse = require('traverse')
 var get = require('lodash.get')
 var es6TemplateRegex = require('es6-template-regex')
 
+function normalizeExpression(expr) {
+  return expr.trim().replace(/\[(\d+)\]/g, '.$1')
+}
+
 module.exports = function(obj, options) {
   options = Object.assign({
     maxDepth: null,
@@ -41,7 +45,8 @@ module.exports = function(obj, options) {
 
       if (keepRefs[path]) {
         var keepAllRefs = allRefs.reduce(function (acc, ref) {
-          return acc && keepRefs[path][ref]
+          var normRef = normalizeExpression(ref)
+          return acc && keepRefs[path][normRef]
         }, true)
         if (keepAllRefs) return
       }
@@ -49,16 +54,18 @@ module.exports = function(obj, options) {
       any = true
 
       var newValue = value.replace(es6TemplateRegex(), function (m, expr) {
-        if (keepRefs[path][expr]) {
+        expr = expr.trim()
+        var normExpr = normalizeExpression(expr)
+        if (keepRefs[path][normExpr]) {
           return m;
         }
-        if (path === expr) {
+        if (path === normExpr) {
           throw new Error('self-reference at path "' + path + '"')
         }
-        if (refs[path][expr]) {
+        if (refs[path][normExpr]) {
           throw new Error('repeated reference to "' + expr + '" at path "' + path + '"')
         }
-        refs[path][expr] = true
+        refs[path][normExpr] = true
         var resolved = get(obj, expr)
         if (resolved === undefined) {
           var message = 'undefined reference "' + expr + '"'
@@ -68,7 +75,7 @@ module.exports = function(obj, options) {
             console[onUndefined](message)
           }
           if (forUndefined === 'keep') {
-            keepRefs[path][expr] = true;
+            keepRefs[path][normExpr] = true;
             return m
           }
           return ''
@@ -82,3 +89,5 @@ module.exports = function(obj, options) {
   }
   return obj
 }
+
+module.exports.normalizeExpression = normalizeExpression
