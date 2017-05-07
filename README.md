@@ -68,7 +68,7 @@ recurpolate(obj, options)
 Used to prevent long processing times or
 infinite loops due to circular references missed by the library.
 
-#### `reportUndefined`
+#### `reportUnresolved`
 > `{String} [='warn']`
 
 Reporting behavior when encountering a reference that resolves to an `undefined` value.
@@ -77,7 +77,7 @@ Reporting behavior when encountering a reference that resolves to an `undefined`
 * `'throw'` - throws an error when
 * `'quiet'` - no warnings
 
-#### `replaceUndefined`
+#### `replaceUnresolved`
 > `{String} [='empty']`
 
 Replacement behavior when encountering a reference that resolves to an `undefuned` value.
