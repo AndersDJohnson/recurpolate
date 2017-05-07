@@ -14,7 +14,11 @@ Should detect circular references and throw error.
 ## Install
 
 ```
-npm install --save recurpolate
+npm i -S recurpolate
+```
+or
+```
+yarn add -S recurpolate
 ```
 
 ## Use 
