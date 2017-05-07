@@ -18,7 +18,7 @@ npm i -S recurpolate
 ```
 or
 ```
-yarn add -S recurpolate
+yarn add recurpolate
 ```
 
 ## Use 
