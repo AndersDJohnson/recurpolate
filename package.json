@@ -4,7 +4,9 @@
   "description": "Recursive, self-referential interpolation of objects.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test:nocov": "jest",
+    "test:cov": "jest --coverage",
+    "test": "npm run test:cov && codecov"
   },
   "author": "Anders D. Johnson",
   "repository": "adjohnson916/recurpolate",
@@ -15,6 +17,10 @@
     "traverse": "^0.6.6"
   },
   "devDependencies": {
+    "codecov": "^2.1.0",
     "jest": "^19.0.2"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/"
   }
 }
