@@ -1,26 +1,32 @@
 var traverse = require('traverse')
 var template = require('lodash.template')
 
-module.exports = function(obj, options) {
-  options = Object.assign({
-    maxDepth: 10
-  }, options)
-  var again = true
-  var i = 0
-  while (again) {
-    ++i
-    if (i > options.maxDepth) {
-      return obj
+function hasExpression(value) {
+  return /\$\{/.test(value)
+}
+
+function process(obj, prevs) {
+  var done = true
+  var newObj = traverse(obj).map(function (value) {
+    if (typeof value === 'string' && hasExpression(value)) {
+      var dotPath = this.path.join('.')
+      var newValue = template(value)(obj)
+      if (newValue !== prevs[dotPath]) {
+        prevs[dotPath] = value
+        this.update(newValue)
+        done = done ? !hasExpression(newValue) : done
+      }
     }
-    var any = false
-    obj = traverse(obj).map(function (x) {
-      if (typeof x !== 'string') return
-      var v = template(x)(obj)
-      // console.log(`"${x}" => "${v}"`)
-      any = any || v.indexOf('${') > -1
-      this.update(v)
-    })
-    again = again && any
+  })
+
+  if (!done) {
+    return process(newObj, prevs)
   }
-  return obj
+
+  return newObj
+}
+
+module.exports = function(obj, options) {
+  var prevs = {};
+  return process(obj, prevs)
 }

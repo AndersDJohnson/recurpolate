@@ -10,7 +10,7 @@ Useful e.g. to DRY up configurations, à la Spring.
 npm install --save recurpolate
 ```
 
-## Use 
+## Use
 
 ```js
 import recurpolate from 'recurpolate'
@@ -51,15 +51,3 @@ yields:
   }
 }
 ```
-
-### Options
-
-```js
-const options = { /* ... */ }
-recurpolate(obj, options)
-```
-
-#### `maxDepth`
-> `{Number} [=10]`
-
-Used to prevent infinite loops due to circular references.

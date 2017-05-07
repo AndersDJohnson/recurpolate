@@ -64,24 +64,6 @@ test('circular gives up on resolving', () => {
   expect(actual).toEqual(expected)
 })
 
-test('max depth option of 0 prevents resolving', () => {
-  var fixture = {
-    a: '${b}',
-    b: '${a}'
-  }
-
-  var expected = {
-    a: '${b}',
-    b: '${a}'
-  }
-
-  var actual = recurpolate(fixture, {
-    maxDepth: 0
-  })
-
-  expect(actual).toEqual(expected)
-})
-
 test('interpolate numbers', () => {
   var fixture = {
     a: '${b}',
