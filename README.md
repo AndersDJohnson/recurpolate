@@ -1,9 +1,10 @@
 # recurpolate
 > Recursive, self-referential interpolation of objects.
 
-[![npm](https://img.shields.io/npm/v/recurpolate.svg?style=flat-square)](https://npmjs.org/package/recurpolate)
-[![Build Status](https://img.shields.io/travis/AndersDJohnson/recurpolate.svg?style=flat-square)](https://travis-ci.org/AndersDJohnson/recurpolate)
-[![codecov](https://img.shields.io/codecov/c/github/AndersDJohnson/recurpolate.svg?style=flat-square)](https://codecov.io/gh/AndersDJohnson/recurpolate)
+[![npm](https://img.shields.io/npm/v/recurpolate.svg)](https://npmjs.org/package/recurpolate)
+[![Build Status](https://img.shields.io/travis/AndersDJohnson/recurpolate.svg)](https://travis-ci.org/AndersDJohnson/recurpolate)
+[![Code Coverage](https://img.shields.io/codecov/c/github/AndersDJohnson/recurpolate.svg)](https://codecov.io/gh/AndersDJohnson/recurpolate)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Useful e.g. to DRY up configurations, à la Spring.
 
