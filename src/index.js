@@ -2,11 +2,11 @@ var traverse = require('traverse')
 var get = require('lodash.get')
 var es6TemplateRegex = require('es6-template-regex')
 
-function normalizeExpression(expr) {
+function normalizeExpression (expr) {
   return expr.trim().replace(/\[(\d+)\]/g, '.$1')
 }
 
-module.exports = function(obj, options) {
+module.exports = function (obj, options) {
   options = Object.assign({
     maxDepth: null,
     reportUnresolved: 'warn', // or 'throw', 'error', 'quiet'
@@ -57,7 +57,7 @@ module.exports = function(obj, options) {
         expr = expr.trim()
         var normExpr = normalizeExpression(expr)
         if (keepRefs[path][normExpr]) {
-          return m;
+          return m
         }
         if (path === normExpr) {
           throw new Error('self-reference at path "' + path + '"')
@@ -75,7 +75,7 @@ module.exports = function(obj, options) {
             console[reportUnresolved](message)
           }
           if (replaceUnresolved === 'keep') {
-            keepRefs[path][normExpr] = true;
+            keepRefs[path][normExpr] = true
             return m
           }
           return ''
