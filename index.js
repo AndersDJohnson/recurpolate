@@ -17,11 +17,16 @@ module.exports = function(obj, options) {
     }
     var any = false
     obj = traverse(obj).map(function (value) {
+      if (this.circular) {
+        throw new Error('unsupported circular object reference')
+      }
       if (typeof value !== 'string') return
       if (!value.match(es6TemplateRegex())) return
+
       any = true
 
       var path = this.path.join('.')
+
       refs[path] = refs[path] || {}
 
       var newValue = value.replace(es6TemplateRegex(), function (m, expr) {
