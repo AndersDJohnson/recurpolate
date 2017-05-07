@@ -239,7 +239,7 @@ describe('handle on undefined references', () => {
     }
 
     var actual = recurpolate(fixture, {
-      forUndefined: 'keep'
+      replaceUnresolved: 'keep'
     })
 
     expect(actual).toEqual(expected)
@@ -254,7 +254,7 @@ describe('handle on undefined references', () => {
 
     expect(function () {
       recurpolate(fixture, {
-        onUndefined: 'throw'
+        reportUnresolved: 'throw'
       })
     }).toThrow('undefined reference')
   })
