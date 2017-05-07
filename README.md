@@ -4,6 +4,7 @@ Recursive, self-referential interpolation of objects.
 
 Useful e.g. to DRY up configurations, à la Spring.
 
+Supports array references (e.g. `a.b[3].c`).
 Should detect circular references and throw error.
 
 ## Install

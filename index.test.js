@@ -1,4 +1,48 @@
 var recurpolate = require('.')
+var normalizeExpression = recurpolate.normalizeExpression
+
+describe('normalizeExpression', () => {
+  it('should trim', () => {
+    expect(normalizeExpression(' a.b.c ')).toBe('a.b.c')
+  })
+  it('should convert index access', () => {
+    expect(normalizeExpression('a.b[0].c')).toBe('a.b.0.c')
+  })
+})
+
+test('basic', () => {
+  var fixture = {
+    a: 'A${b}',
+    b: 'B'
+  }
+
+  var expected = {
+    a: 'AB',
+    b: 'B'
+  }
+
+  var actual = recurpolate(fixture)
+
+  expect(actual).toEqual(expected)
+})
+
+test('arrays', () => {
+  var fixture = {
+    a: 'A${ b[0] }',
+    b: [
+      'B0'
+    ]
+  }
+
+  var expected = {
+    a: 'AB0',
+    b: [ 'B0' ]
+  }
+
+  var actual = recurpolate(fixture)
+
+  expect(actual).toEqual(expected)
+})
 
 test('deep', () => {
   var fixture = {
@@ -48,7 +92,7 @@ test('deep 2', () => {
   expect(actual).toEqual(expected)
 })
 
-test('circular gives up on resolving', () => {
+test('circular throws on resolving', () => {
   var fixture = {
     a: '${b}',
     b: '${a}'
@@ -59,7 +103,18 @@ test('circular gives up on resolving', () => {
   }).toThrow('self-reference')
 })
 
-test('circular 3-way gives up on resolving', () => {
+test('circular throws on resolving with arrays', () => {
+  var fixture = {
+    a: [ '${b[0]}' ],
+    b: [ '${a[0]}' ]
+  }
+
+  expect(function () {
+    recurpolate(fixture)
+  }).toThrow('self-reference')
+})
+
+test('circular 3-way throws on resolving', () => {
   var fixture = {
     a: 'b${b}',
     b: 'c${c}',
@@ -68,6 +123,19 @@ test('circular 3-way gives up on resolving', () => {
 
   expect(function () {
     recurpolate(fixture)
+  }).toThrow('repeated reference')
+})
+
+test('circular 3-way throws on resolving with arrays', () => {
+  var fixture = {
+    a: [ 'b${ b[0] }' ],
+    b: [ 'c${ c[0]}' ],
+    c: [ 'a${a[0] }' ]
+  }
+
+  expect(function () {
+    var actual = recurpolate(fixture)
+    console.log('actual', actual)
   }).toThrow('repeated reference')
 })
 
@@ -139,7 +207,7 @@ test('interpolate objects', () => {
 })
 
 describe('handle on undefined references', () => {
-  test('replace with nothing', () => {
+  it('should replace with nothing', () => {
     var fixture = {
       a: 'A${b}',
       c: 'C${d}',
@@ -157,7 +225,7 @@ describe('handle on undefined references', () => {
     expect(actual).toEqual(expected)
   })
 
-  test('keep references if requested', () => {
+  it('should keep references if requested', () => {
     var fixture = {
       a: 'A${b}',
       c: 'C${d}',
@@ -177,7 +245,7 @@ describe('handle on undefined references', () => {
     expect(actual).toEqual(expected)
   })
 
-  test('throw if requested', () => {
+  it('should throw if requested', () => {
     var fixture = {
       a: 'A${b}',
       c: 'C${d}',
