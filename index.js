@@ -4,11 +4,17 @@ var es6TemplateRegex = require('es6-template-regex')
 
 module.exports = function(obj, options) {
   options = Object.assign({
-    maxDepth: null
+    maxDepth: null,
+    onUndefined: 'warn', // or 'throw', 'error', 'quiet'
+    forUndefined: 'empty' // or 'keep'
   }, options)
   var maxDepth = options.maxDepth
+  var onUndefined = options.onUndefined
+  var forUndefined = options.forUndefined
+
   var again = true
   var refs = {}
+  var keepRefs = {}
   var i = 0
   while (again) {
     ++i
@@ -23,13 +29,29 @@ module.exports = function(obj, options) {
       if (typeof value !== 'string') return
       if (!value.match(es6TemplateRegex())) return
 
-      any = true
+      var allRefs = []
+      value.replace(es6TemplateRegex(), function (m, expr) {
+        allRefs.push(expr)
+      })
 
       var path = this.path.join('.')
 
       refs[path] = refs[path] || {}
+      keepRefs[path] = keepRefs[path] || {}
+
+      if (keepRefs[path]) {
+        var keepAllRefs = allRefs.reduce(function (acc, ref) {
+          return acc && keepRefs[path][ref]
+        }, true)
+        if (keepAllRefs) return
+      }
+
+      any = true
 
       var newValue = value.replace(es6TemplateRegex(), function (m, expr) {
+        if (keepRefs[path][expr]) {
+          return m;
+        }
         if (path === expr) {
           throw new Error('self-reference at path "' + path + '"')
         }
@@ -37,7 +59,21 @@ module.exports = function(obj, options) {
           throw new Error('repeated reference to "' + expr + '" at path "' + path + '"')
         }
         refs[path][expr] = true
-        return get(obj, expr)
+        var resolved = get(obj, expr)
+        if (resolved === undefined) {
+          var message = 'undefined reference "' + expr + '"'
+          if (onUndefined === 'throw') {
+            throw new Error(message)
+          } else if (onUndefined !== 'quiet') {
+            console[onUndefined](message)
+          }
+          if (forUndefined === 'keep') {
+            keepRefs[path][expr] = true;
+            return m
+          }
+          return ''
+        }
+        return resolved
       })
 
       this.update(newValue)
