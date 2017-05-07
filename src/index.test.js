@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 var recurpolate = require('.')
 var normalizeExpression = recurpolate.normalizeExpression
 
@@ -168,6 +170,8 @@ test('max depth option of 0 prevents resolving', () => {
   var actual = recurpolate(fixture, {
     maxDepth: 0
   })
+
+  expect(actual).toEqual(expected)
 })
 
 test('interpolate numbers', () => {
