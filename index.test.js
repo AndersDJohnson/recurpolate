@@ -54,14 +54,36 @@ test('circular gives up on resolving', () => {
     b: '${a}'
   }
 
-  var expected = {
-    a: '${a}',
-    b: '${b}'
+  expect(function () {
+    recurpolate(fixture)
+  }).toThrow('self-reference')
+})
+
+test('circular 3-way gives up on resolving', () => {
+  var fixture = {
+    a: 'b${b}',
+    b: 'c${c}',
+    c: 'a${a}'
   }
 
-  var actual = recurpolate(fixture)
+  expect(function () {
+    recurpolate(fixture)
+  }).toThrow('repeated reference')
+})
 
-  expect(actual).toEqual(expected)
+test('circular object reference', () => {
+  var a = {
+    b: '${c}'
+  }
+  a.a = a
+  var fixture = {
+    a: a,
+    c: 'C'
+  }
+
+  expect(function () {
+    recurpolate(fixture)
+  }).toThrow('circular object reference')
 })
 
 test('max depth option of 0 prevents resolving', () => {
@@ -78,8 +100,6 @@ test('max depth option of 0 prevents resolving', () => {
   var actual = recurpolate(fixture, {
     maxDepth: 0
   })
-
-  expect(actual).toEqual(expected)
 })
 
 test('interpolate numbers', () => {
