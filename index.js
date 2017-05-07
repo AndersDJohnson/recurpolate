@@ -1,24 +1,46 @@
 var traverse = require('traverse')
-var template = require('lodash.template')
+var get = require('lodash.get')
+var es6TemplateRegex = require('es6-template-regex')
 
 module.exports = function(obj, options) {
   options = Object.assign({
-    maxDepth: 10
+    maxDepth: null
   }, options)
+  var maxDepth = options.maxDepth
   var again = true
+  var refs = {}
   var i = 0
   while (again) {
     ++i
-    if (i > options.maxDepth) {
+    if (maxDepth !== null && i > maxDepth) {
       return obj
     }
     var any = false
-    obj = traverse(obj).map(function (x) {
-      if (typeof x !== 'string') return
-      var v = template(x)(obj)
-      // console.log(`"${x}" => "${v}"`)
-      any = any || v.indexOf('${') > -1
-      this.update(v)
+    obj = traverse(obj).map(function (value) {
+      if (this.circular) {
+        throw new Error('unsupported circular object reference')
+      }
+      if (typeof value !== 'string') return
+      if (!value.match(es6TemplateRegex())) return
+
+      any = true
+
+      var path = this.path.join('.')
+
+      refs[path] = refs[path] || {}
+
+      var newValue = value.replace(es6TemplateRegex(), function (m, expr) {
+        if (path === expr) {
+          throw new Error('self-reference at path "' + path + '"')
+        }
+        if (refs[path][expr]) {
+          throw new Error('repeated reference to "' + expr + '" at path "' + path + '"')
+        }
+        refs[path][expr] = true
+        return get(obj, expr)
+      })
+
+      this.update(newValue)
     })
     again = again && any
   }

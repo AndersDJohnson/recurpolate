@@ -10,7 +10,8 @@
   "repository": "AndersDJohnson/recurpolate",
   "license": "ISC",
   "dependencies": {
-    "lodash.template": "^4.4.0",
+    "es6-template-regex": "^0.1.1",
+    "lodash.get": "^4.4.2",
     "traverse": "^0.6.6"
   },
   "devDependencies": {

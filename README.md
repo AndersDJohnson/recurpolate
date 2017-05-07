@@ -4,6 +4,8 @@ Recursive, self-referential interpolation of objects.
 
 Useful e.g. to DRY up configurations, à la Spring.
 
+Should detect circular references and throw error.
+
 ## Install
 
 ```
@@ -60,6 +62,7 @@ recurpolate(obj, options)
 ```
 
 #### `maxDepth`
-> `{Number} [=10]`
+> `{Number} [=null]`
 
-Used to prevent infinite loops due to circular references.
+Used to prevent long processing times or
+infinite loops due to circular references missed by the library.
