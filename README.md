@@ -66,3 +66,20 @@ recurpolate(obj, options)
 
 Used to prevent long processing times or
 infinite loops due to circular references missed by the library.
+
+#### `reportUndefined`
+> `{String} [='warn']`
+
+Reporting behavior when encountering a reference that resolves to an `undefined` value.
+
+* `'warn'`, `'error'`, etc. - any method on `console`
+* `'throw'` - throws an error when
+* `'quiet'` - no warnings
+
+#### `replaceUndefined`
+> `{String} [='empty']`
+
+Replacement behavior when encountering a reference that resolves to an `undefuned` value.
+
+* `'empty'` - removes the references from the strings, replacing with empty string
+* `'keep'` - keeps the references in the strings, e.g. `${some.undefined.value}`
