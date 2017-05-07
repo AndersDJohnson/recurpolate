@@ -137,3 +137,57 @@ test('interpolate objects', () => {
 
   expect(actual).toEqual(expected)
 })
+
+describe('handle on undefined references', () => {
+  test('replace with nothing', () => {
+    var fixture = {
+      a: 'A${b}',
+      c: 'C${d}',
+      d: 'D'
+    }
+
+    var expected = {
+      a: 'A',
+      c: 'CD',
+      d: 'D'
+    }
+
+    var actual = recurpolate(fixture)
+
+    expect(actual).toEqual(expected)
+  })
+
+  test('keep references if requested', () => {
+    var fixture = {
+      a: 'A${b}',
+      c: 'C${d}',
+      d: 'D'
+    }
+
+    var expected = {
+      a: 'A${b}',
+      c: 'CD',
+      d: 'D'
+    }
+
+    var actual = recurpolate(fixture, {
+      forUndefined: 'keep'
+    })
+
+    expect(actual).toEqual(expected)
+  })
+
+  test('throw if requested', () => {
+    var fixture = {
+      a: 'A${b}',
+      c: 'C${d}',
+      d: 'D'
+    }
+
+    expect(function () {
+      recurpolate(fixture, {
+        onUndefined: 'throw'
+      })
+    }).toThrow('undefined reference')
+  })
+})
