@@ -9,12 +9,12 @@ function normalizeExpression(expr) {
 module.exports = function(obj, options) {
   options = Object.assign({
     maxDepth: null,
-    onUndefined: 'warn', // or 'throw', 'error', 'quiet'
-    forUndefined: 'empty' // or 'keep'
+    reportUnresolved: 'warn', // or 'throw', 'error', 'quiet'
+    replaceUnresolved: 'empty' // or 'keep'
   }, options)
   var maxDepth = options.maxDepth
-  var onUndefined = options.onUndefined
-  var forUndefined = options.forUndefined
+  var reportUnresolved = options.reportUnresolved
+  var replaceUnresolved = options.replaceUnresolved
 
   var again = true
   var refs = {}
@@ -69,12 +69,12 @@ module.exports = function(obj, options) {
         var resolved = get(obj, expr)
         if (resolved === undefined) {
           var message = 'undefined reference "' + expr + '"'
-          if (onUndefined === 'throw') {
+          if (reportUnresolved === 'throw') {
             throw new Error(message)
-          } else if (onUndefined !== 'quiet') {
-            console[onUndefined](message)
+          } else if (reportUnresolved !== 'quiet') {
+            console[reportUnresolved](message)
           }
-          if (forUndefined === 'keep') {
+          if (replaceUnresolved === 'keep') {
             keepRefs[path][normExpr] = true;
             return m
           }
