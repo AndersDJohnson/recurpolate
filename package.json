@@ -2,11 +2,12 @@
   "name": "recurpolate",
   "version": "1.0.0",
   "description": "Recursive, self-referential interpolation of objects.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test:nocov": "jest",
+    "lint": "eslint src/**/*.js",
+    "test": "npm run lint && npm run test:cov && codecov",
     "test:cov": "jest --coverage",
-    "test": "npm run test:cov && codecov"
+    "test:nocov": "jest"
   },
   "author": "Anders D. Johnson",
   "repository": "adjohnson916/recurpolate",
@@ -18,6 +19,12 @@
   },
   "devDependencies": {
     "codecov": "^2.1.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "jest": "^19.0.2"
   },
   "jest": {
