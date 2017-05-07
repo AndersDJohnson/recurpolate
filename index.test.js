@@ -71,17 +71,20 @@ test('circular 3-way gives up on resolving', () => {
   }).toThrow('repeated reference')
 })
 
-// test('circular object reference', () => {
-//   var a = {
-//     b: 'b'
-//   }
-//   a.a = a
-//   var fixture = {
-//     a: a
-//   }
-//
-//   recurpolate(fixture)
-// })
+test('circular object reference', () => {
+  var a = {
+    b: '${c}'
+  }
+  a.a = a
+  var fixture = {
+    a: a,
+    c: 'C'
+  }
+
+  expect(function () {
+    recurpolate(fixture)
+  }).toThrow('circular object reference')
+})
 
 test('max depth option of 0 prevents resolving', () => {
   var fixture = {
