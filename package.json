@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src/**/*.js",
+    "prepush": "npm test",
     "test": "npm run lint && npm run test:cov && codecov",
     "test:cov": "jest --coverage",
     "test:nocov": "jest"
@@ -25,6 +26,7 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.13.3",
     "jest": "^19.0.2"
   },
   "jest": {
