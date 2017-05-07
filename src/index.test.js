@@ -1,7 +1,18 @@
 /* eslint-env jest */
+// var log = console.log
+
+global.console = {
+  error: jest.fn(),
+  warn: jest.fn(),
+  log: jest.fn()
+}
 
 var recurpolate = require('.')
 var normalizeExpression = recurpolate.normalizeExpression
+
+beforeEach(() => {
+  jest.resetAllMocks()
+})
 
 describe('normalizeExpression', () => {
   it('should trim', () => {
@@ -136,8 +147,7 @@ test('circular 3-way throws on resolving with arrays', () => {
   }
 
   expect(function () {
-    var actual = recurpolate(fixture)
-    console.log('actual', actual)
+    recurpolate(fixture)
   }).toThrow('repeated reference')
 })
 
@@ -210,7 +220,55 @@ test('interpolate objects', () => {
   expect(actual).toEqual(expected)
 })
 
-describe('handle on undefined references', () => {
+describe('handle unresolved references', () => {
+  it('should quiet reporting when requested', () => {
+    var fixture = {
+      a: 'A${b}'
+    }
+
+    recurpolate(fixture, {
+      reportUnresolved: 'quiet'
+    })
+
+    expect(console.warn.mock.calls).toHaveLength(0)
+  })
+
+  it('should log when requested', () => {
+    var fixture = {
+      a: 'A${b}'
+    }
+
+    recurpolate(fixture, {
+      reportUnresolved: 'log'
+    })
+
+    expect(console.log.mock.calls[0][0]).toMatch(/unresolved reference/)
+  })
+
+  it('should log warn when requested', () => {
+    var fixture = {
+      a: 'A${b}'
+    }
+
+    recurpolate(fixture, {
+      reportUnresolved: 'warn'
+    })
+
+    expect(console.warn.mock.calls[0][0]).toMatch(/unresolved reference/)
+  })
+
+  it('should log error when requested', () => {
+    var fixture = {
+      a: 'A${b}'
+    }
+
+    recurpolate(fixture, {
+      reportUnresolved: 'error'
+    })
+
+    expect(console.error.mock.calls[0][0]).toMatch(/unresolved reference/)
+  })
+
   it('should replace with nothing', () => {
     var fixture = {
       a: 'A${b}',
@@ -233,13 +291,15 @@ describe('handle on undefined references', () => {
     var fixture = {
       a: 'A${b}',
       c: 'C${d}',
-      d: 'D'
+      d: 'D',
+      e: '${d}'
     }
 
     var expected = {
       a: 'A${b}',
       c: 'CD',
-      d: 'D'
+      d: 'D',
+      e: 'D'
     }
 
     var actual = recurpolate(fixture, {
@@ -260,6 +320,6 @@ describe('handle on undefined references', () => {
       recurpolate(fixture, {
         reportUnresolved: 'throw'
       })
-    }).toThrow('undefined reference')
+    }).toThrow('unresolved reference')
   })
 })
