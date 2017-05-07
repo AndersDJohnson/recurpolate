@@ -43,22 +43,17 @@ module.exports = function (obj, options) {
       refs[path] = refs[path] || {}
       keepRefs[path] = keepRefs[path] || {}
 
-      if (keepRefs[path]) {
-        var keepAllRefs = allRefs.reduce(function (acc, ref) {
-          var normRef = normalizeExpression(ref)
-          return acc && keepRefs[path][normRef]
-        }, true)
-        if (keepAllRefs) return
-      }
+      var keepAllRefs = allRefs.reduce(function (acc, ref) {
+        var normRef = normalizeExpression(ref)
+        return acc && keepRefs[path][normRef]
+      }, true)
+      if (keepAllRefs) return
 
       any = true
 
       var newValue = value.replace(es6TemplateRegex(), function (m, expr) {
         expr = expr.trim()
         var normExpr = normalizeExpression(expr)
-        if (keepRefs[path][normExpr]) {
-          return m
-        }
         if (path === normExpr) {
           throw new Error('self-reference at path "' + path + '"')
         }
@@ -68,7 +63,7 @@ module.exports = function (obj, options) {
         refs[path][normExpr] = true
         var resolved = get(obj, expr)
         if (resolved === undefined) {
-          var message = 'undefined reference "' + expr + '"'
+          var message = 'unresolved reference "' + expr + '"'
           if (reportUnresolved === 'throw') {
             throw new Error(message)
           } else if (reportUnresolved !== 'quiet') {
