@@ -1,6 +1,6 @@
 {
   "name": "recurpolate",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Recursive, self-referential interpolation of objects.",
   "main": "src/index.js",
   "scripts": {
