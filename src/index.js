@@ -8,10 +8,12 @@ function normalizeExpression (expr) {
 
 module.exports = function (obj, options) {
   options = Object.assign({
+    context: null,
     maxDepth: null,
     reportUnresolved: 'warn', // or 'throw', 'error', 'quiet'
     replaceUnresolved: 'empty' // or 'keep'
   }, options)
+  var context = options.context
   var maxDepth = options.maxDepth
   var reportUnresolved = options.reportUnresolved
   var replaceUnresolved = options.replaceUnresolved
@@ -61,7 +63,7 @@ module.exports = function (obj, options) {
           throw new Error('repeated reference to "' + expr + '" at path "' + path + '"')
         }
         refs[path][normExpr] = true
-        var resolved = get(obj, expr)
+        var resolved = get(obj, expr) || get(context, expr)
         if (resolved === undefined) {
           var message = 'unresolved reference "' + expr + '"'
           if (reportUnresolved === 'throw') {

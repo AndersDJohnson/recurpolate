@@ -21,7 +21,7 @@ or
 yarn add recurpolate
 ```
 
-## Use 
+## Use
 
 ```js
 import recurpolate from 'recurpolate'
@@ -69,6 +69,11 @@ yields:
 const options = { /* ... */ }
 recurpolate(obj, options)
 ```
+#### `context`
+> `{Object} [=null]`
+
+If provided, serves as a fallback source for references when unresolved in object itself.
+Allows interpolating to values that aren't actually in the source/target object.
 
 #### `maxDepth`
 > `{Number} [=null]`

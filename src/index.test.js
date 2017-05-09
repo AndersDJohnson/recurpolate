@@ -39,6 +39,47 @@ test('basic', () => {
   expect(actual).toEqual(expected)
 })
 
+test('context', () => {
+  var fixture = {
+    a: 'A${b}',
+    b: 'B${c}'
+  }
+
+  var expected = {
+    a: 'ABC',
+    b: 'BC'
+  }
+
+  var actual = recurpolate(fixture, {
+    context: {
+      c: 'C${d}'
+    }
+  })
+
+  expect(actual).toEqual(expected)
+})
+
+test('context, keeping unresolved', () => {
+  var fixture = {
+    a: 'A${b}',
+    b: 'B${c}'
+  }
+
+  var expected = {
+    a: 'ABC${d}',
+    b: 'BC${d}'
+  }
+
+  var actual = recurpolate(fixture, {
+    context: {
+      c: 'C${d}'
+    },
+    replaceUnresolved: 'keep'
+  })
+
+  expect(actual).toEqual(expected)
+})
+
 test('arrays', () => {
   var fixture = {
     a: 'A${ b[0] }',
