@@ -93,7 +93,7 @@ Reporting behavior when encountering a reference that resolves to an `undefined`
 #### `replaceUnresolved`
 > `{String} [='empty']`
 
-Replacement behavior when encountering a reference that resolves to an `undefuned` value.
+Replacement behavior when encountering a reference that resolves to an `undefined` value.
 
 * `'empty'` - removes the references from the strings, replacing with empty string
 * `'keep'` - keeps the references in the strings, e.g. `${some.undefined.value}`
