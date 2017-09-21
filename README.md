@@ -1,13 +1,16 @@
 # recurpolate
-> Recursive, self-referential interpolation of objects.
+> Recursive interpolation of objects.
 
 [![npm](https://img.shields.io/npm/v/recurpolate.svg)](https://npmjs.org/package/recurpolate)
 [![Build Status](https://img.shields.io/travis/AndersDJohnson/recurpolate.svg)](https://travis-ci.org/AndersDJohnson/recurpolate)
 [![Code Coverage](https://img.shields.io/codecov/c/github/AndersDJohnson/recurpolate.svg)](https://codecov.io/gh/AndersDJohnson/recurpolate)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+A portmanteau of "recurse" and "interpolate".
+
 Useful e.g. to DRY up configurations, à la Spring.
 
+Supports self-reference.
 Supports array references (e.g. `a.b[3].c`).
 Should detect circular references and throw error.
 
