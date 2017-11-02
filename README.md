@@ -66,6 +66,72 @@ yields:
 }
 ```
 
+Using the `context` option (or something like `lodash.merge`), you can easily created environment-specific configurations that all inherit from a default, e.g.:
+
+```js
+// default.json
+{
+  "api": {
+    "products": "${api.base}/products/v1",
+    "coupons": "${api.base}/coupons/v2",
+  }
+}
+```
+
+```js
+// development.json
+{
+  "api": {
+    "base": "https://dev.api.example.com"
+  }
+}
+```
+
+```js
+// production.json
+{
+  "api": {
+    "base": "https://api.example.com"
+  }
+}
+```
+
+```js
+import recurpolate from 'recurpolate'
+import defaultConfig from './default.json'
+import developmentContext from './development.json'
+import productionContext from './production.json'
+
+const isProduction = process.env.NODE_ENV === 'production'
+const context = isProduction ? productionContext : developmentContext
+
+const config = recurpolate(defaultConfig, {
+  context
+})
+```
+
+results in `config` being this in production:
+
+```js
+{
+  "api": {
+    "products": "https://api.example.com/products/v1",
+    "coupons": "https://api.example.com/coupons/v2",
+  }
+}
+```
+
+but this in development:
+
+```js
+{
+  "api": {
+    "products": "https://dev.api.example.com/products/v1",
+    "coupons": "https://dev.api.example.com/coupons/v2",
+  }
+}
+```
+
 ### Options
 
 ```js
