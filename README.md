@@ -16,13 +16,7 @@ Should detect circular references and throw error.
 
 ## Install
 
-```
-npm i -S recurpolate
-```
-or
-```
-yarn add recurpolate
-```
+[![npm i -S recurpolate (copy)](https://copyhaste.com/i?t=npm%20i%20-S%20recurpolate)](https://copyhaste.com/c?t=npm%20i%20-S%20recurpolate "npm i -S recurpolate (copy)") [![yarn add recurpolate (copy)](https://copyhaste.com/i?t=yarn%20add%20recurpolate)](https://copyhaste.com/c?t=yarn%20add%20recurpolate "yarn add recurpolate (copy)")
 
 ## Use
 
