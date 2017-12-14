@@ -1,5 +1,4 @@
 /* eslint-env jest */
-// var log = console.log
 
 global.console = {
   error: jest.fn(),
